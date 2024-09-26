@@ -1,39 +1,36 @@
 import React from 'react';
-import { Typography, Grid } from '@mui/material';
 
 const RobotInfo = () => {
   const robotData = {
     Position: {
-      Coord: { X: 10, Y: 5, Z: 14 },
-      Ejes: { J1: 10, J2: 5, J3: 14, J4: 3, J5: 2, J6: 4 }
+      Coord: { X: 0, Y: 0, Z: 0, Pitch:0, Roll:0, Yaw: 0 },
+      Ejes: { J1: 0, J2: 0, J3: 0, J4: 0, J5: 0, J6: 0 }
     },
-    Robot: {
-      IP: '10.1.10.129',
-      Nombre: 'Niryo Ned 2',
-      Herramienta: 'Pinzas'
+    RoboticArm : {
+      IP: '10.10.10.10',
+      Name: 'Niryo Ned 2',
+      Tool: 'Standard Gripper'
     },
-    Camara: {
-      IP: '10.1.10.115',
-      Nombre: 'Camera1'
+    Camera: {
+      IP: '192.168.1.100',
+      Name: 'Camera1'
     }
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Typography variant="h6">Datos del robot</Typography>
-      </Grid>
+    <div className="grid gap-4">
+      <h2 className="text-xl font-semibold">Datos del robot</h2>
       {Object.entries(robotData).map(([category, data]) => (
-        <Grid item xs={12} key={category}>
-          <Typography variant="subtitle1">{category}</Typography>
+        <div key={category}>
+          <h3 className="font-medium">{category}</h3>
           {Object.entries(data).map(([key, value]) => (
-            <Typography variant="body2" key={key}>
+            <p key={key} className="text-gray-700">
               {key}: {typeof value === 'object' ? JSON.stringify(value) : value}
-            </Typography>
+            </p>
           ))}
-        </Grid>
+        </div>
       ))}
-    </Grid>
+    </div>
   );
 };
 

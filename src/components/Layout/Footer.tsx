@@ -1,25 +1,14 @@
 import React from 'react';
-import { Box, Container, Typography, Link } from '@mui/material';
 
 const Footer = () => {
   return (
-    <Box component="footer" sx={{ bgcolor: 'background.paper', py: 2 }}>
-      <Container maxWidth="lg">
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          align="center"
-          sx={{ fontFamily: 'Roboto Mono, monospace' }} // Aplica la fuente aquí
-        >
-          {'Copyright © '}
-          <Link color="inherit" href="https://tu-sitio-web.com/" sx={{ fontFamily: 'Roboto Mono, monospace' }}>
-            Control de Robot Niryo
-          </Link>{' '}
-          {new Date().getFullYear()}
-          {'.'}
-        </Typography>
-      </Container>
-    </Box>
+    <footer className="bg-gray-100 py-2">
+      <div className="max-w-screen-lg mx-auto">
+        <p className="text-center text-gray-600">
+          {`©️ ${new Date().getFullYear()} Arm Control. All rights reserved | Privacy Policy`}
+        </p>
+      </div>
+    </footer>
   );
 };
 

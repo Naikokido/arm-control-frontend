@@ -1,45 +1,49 @@
 import React, { useState } from 'react';
-import { Slider, Typography, Grid } from '@mui/material';
 
 const axisConfig = [
-  { name: 'Rotación Base', min: 0, max: 360 },
-  { name: 'Movimiento Hombro', min: 0, max: 180 },
-  { name: 'Movimiento Codo', min: 0, max: 180 },
-  { name: 'Rotación Muñeca', min: 0, max: 180 },
-  { name: 'Inclinación Muñeca', min: 0, max: 180 },
-  { name: 'Herramienta', min: 0, max: 180 },
+  { name: 'Base Rotation', min: -168.9, max: 168.9 },
+  { name: 'Shoulder', min: -104.8, max: 34.9 },
+  { name: 'Elbow', min: -76.7, max: 90 },
+  { name: 'Wrist (Rotation)', min: -120, max: 120 },
+  { name: 'Wrist (Inclination)', min: -110, max: 110 },
+  { name: 'Tool', min: -145, max: 145 },
 ];
 
 const AxisControl = () => {
+  // Cambiamos el estado inicial a valores de punto flotante.
   const [axisValues, setAxisValues] = useState(axisConfig.map(() => 0));
 
-  const handleSliderChange = (index) => (event, newValue) => {
+  const handleSliderChange = (index) => (event) => {
     const newAxisValues = [...axisValues];
-    newAxisValues[index] = newValue;
+    // Usamos parseFloat en vez de parseInt para obtener decimales.
+    newAxisValues[index] = parseFloat(event.target.value);
     setAxisValues(newAxisValues);
   };
 
   return (
-    <Grid container spacing={2}>
+    <div className="grid gap-4">
       {axisConfig.map((axis, index) => (
-        <Grid item xs={12} key={axis.name}>
-          <Typography gutterBottom>
-            Eje {index + 1}: {axis.name}
-          </Typography>
-          <Slider
+        <div key={axis.name} className="space-y-2">
+          <label className="block text-gray-700">
+            J{index + 1}: {axis.name}
+          </label>
+          <input
+            type="range"
             value={axisValues[index]}
             onChange={handleSliderChange(index)}
-            valueLabelDisplay="auto"
             min={axis.min}
             max={axis.max}
-            marks={[
-              { value: axis.min, label: `${axis.min}°` },
-              { value: axis.max, label: `${axis.max}°` },
-            ]}
+            step="0.1"  // Esto permite un control más preciso con decimales
+            className="w-full"
           />
-        </Grid>
+          <div className="flex justify-between text-gray-500">
+            <span>{axis.min}°</span>
+            <span>{axisValues[index].toFixed(1)}°</span> {/* Mostrar valor con un decimal */}
+            <span>{axis.max}°</span>
+          </div>
+        </div>
       ))}
-    </Grid>
+    </div>
   );
 };
 

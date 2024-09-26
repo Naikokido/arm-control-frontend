@@ -1,29 +1,26 @@
 import React from 'react';
-import { Typography, Box, Paper, ThemeProvider, createTheme } from '@mui/material';
-
-const theme = createTheme({
-  typography: {
-    fontFamily: 'Roboto Mono, monospace',
-  },
-});
+import Header from '../components/Layout/Header';
+import Footer from '../components/Layout/Footer';
 
 const About = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ padding: 3 }}>
-        <Paper elevation={3} sx={{ padding: 3 }}>
-          <Typography variant="h4" gutterBottom>
-            Acerca de Nosotros
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Somos una empresa dedicada al control y monitoreo de robots Niryo NED 2. Nuestra misión es proporcionar soluciones intuitivas y eficientes para la automatización industrial.
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Con años de experiencia en robótica y automatización, nuestro equipo se esfuerza por ofrecer las mejores herramientas para el control de robots, permitiendo a nuestros clientes optimizar sus procesos y aumentar su productividad.
-          </Typography>
-        </Paper>
-      </Box>
-    </ThemeProvider>
+    <>
+      <Header />
+      <div className="min-h-screen flex flex-col">
+        <div className="flex-1 p-8">
+          <div className="bg-white shadow-lg p-6">
+            <h1 className="text-3xl font-bold mb-4">About us</h1>
+            <p className="text-lg mb-4">
+            The UOH Robotics and Intelligent Systems Laboratory (RIS LAB) at the Institute of Engineering Sciences, Universidad de O'Higgins, focuses on research and development in areas such as Artificial Intelligence, Machine Learning, Computer Vision, and Robotics.
+            </p>
+            <p className="text-lg">
+            The lab applies these technologies across a variety of sectors, including agriculture, transportation, mining, healthcare, and more.
+            </p>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
   );
 };
 

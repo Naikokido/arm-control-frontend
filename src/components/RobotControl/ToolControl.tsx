@@ -1,58 +1,56 @@
 import React, { useState } from 'react';
-import { Select, MenuItem, Slider, Typography, Grid } from '@mui/material';
 
-const tools = ['Pinza estándar', 'Ventosa', 'Pinza gran apertura', 'Electroimán', 'Destornillador'];
+const tools = ['Electromagnet','Extruder','Large Opening Gripper','Standard Gripper', 'Screwdriver','Vacuum Pump'];
 
 const ToolControl = () => {
   const [selectedTool, setSelectedTool] = useState(tools[0]);
   const [openForce, setOpenForce] = useState(50);
   const [closeForce, setCloseForce] = useState(50);
 
-  const handleToolChange = (event) => {
-    setSelectedTool(event.target.value);
-  };
-
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Typography variant="h6">Control de herramienta</Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Select
-          value={selectedTool}
-          onChange={handleToolChange}
-          fullWidth
-        >
-          {tools.map((tool) => (
-            <MenuItem key={tool} value={tool}>{tool}</MenuItem>
-          ))}
-        </Select>
-      </Grid>
-      {['Pinza estándar', 'Pinza gran apertura'].includes(selectedTool) && (
+    <div className="grid gap-4">
+      <h2 className="text-xl font-semibold">Tool Selector</h2>
+      <select
+        value={selectedTool}
+        onChange={(e) => setSelectedTool(e.target.value)}
+        className="p-2 border border-gray-300 rounded"
+      >
+        {tools.map((tool) => (
+          <option key={tool} value={tool}>
+            {tool}
+          </option>
+        ))}
+      </select>
+
+      {['Standard Gripper', 'Large Opening Gripper'].includes(selectedTool) && (
         <>
-          <Grid item xs={12}>
-            <Typography gutterBottom>Fuerza de apertura</Typography>
-            <Slider
+          <div>
+            <label className="block text-gray-700">Opening force</label>
+            <input
+              type="range"
               value={openForce}
-              onChange={(e, newValue) => setOpenForce(newValue)}
-              valueLabelDisplay="auto"
-              min={0}
-              max={100}
+              onChange={(e) => setOpenForce(parseInt(e.target.value))}
+              min="0"
+              max="100"
+              className="w-full"
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography gutterBottom>Fuerza de cierre</Typography>
-            <Slider
+            <div className="text-gray-500 text-right">{openForce}%</div> {/* Mostrar el valor de apertura */}
+          </div>
+          <div>
+            <label className="block text-gray-700">Closing force</label>
+            <input
+              type="range"
               value={closeForce}
-              onChange={(e, newValue) => setCloseForce(newValue)}
-              valueLabelDisplay="auto"
-              min={0}
-              max={100}
+              onChange={(e) => setCloseForce(parseInt(e.target.value))}
+              min="0"
+              max="100"
+              className="w-full"
             />
-          </Grid>
+            <div className="text-gray-500 text-right">{closeForce}%</div> {/* Mostrar el valor de cierre */}
+          </div>
         </>
       )}
-    </Grid>
+    </div>
   );
 };
 
