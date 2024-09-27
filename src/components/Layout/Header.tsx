@@ -1,11 +1,12 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Box, Button, Avatar, Menu, MenuItem, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, Box, Button, Menu, MenuItem, IconButton, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import logoArmControl from '../../assets/logo.png';
-import { useState } from 'react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // Importa el ícono de salida
+import AccountCircle from '@mui/icons-material/AccountCircle'; // Importa el ícono de usuario
+import { Slide } from '@mui/material'; // Para la animación de deslizamiento
 
-const Header = ({ username }) => {
+const Header = ({ username, email }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -23,7 +24,13 @@ const Header = ({ username }) => {
         {/* Logo y Nombre a la izquierda */}
         <Box display="flex" alignItems="center">
           <img src={logoArmControl} alt="logo" style={{ width: '40px', height: '40px', marginRight: '10px' }} />
-          <Typography variant="h6" sx={{ fontFamily: 'Roboto Mono, monospace', fontWeight: 'bold' }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontFamily: 'Orbitron, sans-serif', // Aplica la fuente Orbitron
+              fontWeight: '700', // Puedes ajustar el peso de la fuente si es necesario
+            }}
+          >
             Virtual Laboratory
           </Typography>
         </Box>
@@ -46,11 +53,8 @@ const Header = ({ username }) => {
 
         {/* Información de Usuario a la derecha */}
         <Box display="flex" alignItems="center">
-          <Typography variant="body1" sx={{ marginRight: 1 }}>
-            {username || 'Username'}
-          </Typography>
           <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
-            <Avatar alt="Usuario" src="https://cdn-icons-png.freepik.com/512/16/16363.png" />
+            <AccountCircle sx={{ fontSize: 40 }} /> {/* Ícono de usuario */}
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -61,7 +65,23 @@ const Header = ({ username }) => {
               vertical: 'top',
               horizontal: 'right',
             }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            TransitionComponent={Slide} // Añadimos la animación de deslizamiento
+            TransitionProps={{ direction: 'left' }} // Definimos que se deslice hacia el lado
           >
+            <Box sx={{ padding: 2, textAlign: 'center' }}>
+              <AccountCircle sx={{ fontSize: 64, margin: '0 auto' }} /> {/* Ícono grande en el menú */}
+              <Typography variant="h6" sx={{ mt: 1 }}>
+                {username || 'Username'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {email || 'user@example.com'}
+              </Typography>
+            </Box>
+            <Divider />
             <MenuItem onClick={handleMenuClose}>
               <Button
                 component={Link}
@@ -70,14 +90,14 @@ const Header = ({ username }) => {
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  textTransform: 'none', // Evita que se ponga en mayúsculas
+                  textTransform: 'none',
                   '&:hover': {
                     color: 'red', // Cambia el color a rojo cuando se pasa el cursor por encima
                   },
                 }}
               >
-                <ExitToAppIcon sx={{ marginRight: 1 }} /> 
-                Sign out 
+                <ExitToAppIcon sx={{ marginRight: 1 }} />
+                Sign out
               </Button>
             </MenuItem>
           </Menu>

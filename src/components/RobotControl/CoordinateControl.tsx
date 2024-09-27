@@ -22,7 +22,7 @@ const CoordinateControl = () => {
 
   return (
     <div className="grid gap-4">
-      <h2 className="text-xl font-semibold">Coordinate Control</h2>
+      
 
       {/* Controles para X, Y y Z en la primera fila */}
       <div className="grid grid-cols-3 gap-4">

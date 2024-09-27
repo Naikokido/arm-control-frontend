@@ -31,6 +31,7 @@ const Dashboard = () => {
                   >
                     Axis Control
                   </button>
+                  
                   <button
                     className={`px-4 py-2 rounded ${controlMode === 'coordenadas' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
                     onClick={() => handleControlModeChange('coordenadas')}
@@ -40,7 +41,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-white shadow p-4 mt-4" >
+              <div className="bg-white shadow p-4 mt-4">
                 {controlMode === 'ejes' ? <AxisControl /> : <CoordinateControl />}
               </div>
               <div className="bg-white shadow p-4 mt-4">
@@ -48,28 +49,31 @@ const Dashboard = () => {
               </div>
             </div>
 
+            {/* Camera Feed */}
             <div className='col-span-2'>
-              <div className="bg-white shadow p-4 h-3/5">
+              <div className="bg-white shadow p-4" style={{ height: '500px' }}> {/* Tamaño fijo para la cámara */}
                 <CameraFeed />
               </div>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="bg-white shadow p-4 mt-4">
                   <RobotConnection /> 
-              </div>
-              <div className="bg-white shadow p-4 mt-4">
-                <CameraConnection /> {/* Añadir CameraConnection */}
-              </div>
-             </div> 
-             </div>
+                </div>
+                <div className="bg-white shadow p-4 mt-4">
+                  <CameraConnection /> {/* Añadir CameraConnection */}
+                </div>
+              </div> 
+            </div>
+
+            {/* Robot Info */}
             <div className='col-span-1 mt-4'>
               <div className="bg-white shadow p-4 mt-4">
                 <RobotInfo />
               </div>
             </div>
 
-            </div>
           </div>
         </div>
+      </div>
       
       <Footer />
     </>
