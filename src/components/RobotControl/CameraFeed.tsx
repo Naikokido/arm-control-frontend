@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CameraFeed = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full border border-gray-300 rounded">

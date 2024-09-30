@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Box, Button, Menu, MenuItem, IconButton, Divider } from '@mui/material';
-import { Link } from 'react-router-dom';
-import logoArmControl from '../../assets/logo.png';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // Importa el ícono de salida
-import AccountCircle from '@mui/icons-material/AccountCircle'; // Importa el ícono de usuario
-import { Slide } from '@mui/material'; // Para la animación de deslizamiento
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  IconButton,
+  Divider,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import logoArmControl from "../../assets/logo.png";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // Importa el ícono de salida
+import AccountCircle from "@mui/icons-material/AccountCircle"; // Importa el ícono de usuario
+import { Slide } from "@mui/material"; // Para la animación de deslizamiento
 
-const Header = ({ username, email }) => {
+const Header = ({ username, email }: { username?: string; email?: string }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -19,16 +29,20 @@ const Header = ({ username, email }) => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: 'blue-600' }}>
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
+    <AppBar position="static" sx={{ backgroundColor: "blue-600" }}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* Logo y Nombre a la izquierda */}
         <Box display="flex" alignItems="center">
-          <img src={logoArmControl} alt="logo" style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+          <img
+            src={logoArmControl}
+            alt="logo"
+            style={{ width: "40px", height: "40px", marginRight: "10px" }}
+          />
           <Typography
             variant="h6"
             sx={{
-              fontFamily: 'Orbitron, sans-serif', // Aplica la fuente Orbitron
-              fontWeight: '700', // Puedes ajustar el peso de la fuente si es necesario
+              fontFamily: "Orbitron, sans-serif", // Aplica la fuente Orbitron
+              fontWeight: "700", // Puedes ajustar el peso de la fuente si es necesario
             }}
           >
             Virtual Laboratory
@@ -36,7 +50,14 @@ const Header = ({ username, email }) => {
         </Box>
 
         {/* Menú centrado */}
-        <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex' }}>
+        <Box
+          sx={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+          }}
+        >
           <Button component={Link} to="/home" color="inherit">
             Home
           </Button>
@@ -60,25 +81,26 @@ const Header = ({ username, email }) => {
             anchorEl={anchorEl}
             open={open}
             onClose={handleMenuClose}
-            sx={{ mt: '49px' }}
+            sx={{ mt: "49px" }}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             TransitionComponent={Slide} // Añadimos la animación de deslizamiento
-            TransitionProps={{ direction: 'left' }} // Definimos que se deslice hacia el lado
+            // TransitionProps={{ direction: "left" }} // Definimos que se deslice hacia el lado
           >
-            <Box sx={{ padding: 2, textAlign: 'center' }}>
-              <AccountCircle sx={{ fontSize: 64, margin: '0 auto' }} /> {/* Ícono grande en el menú */}
+            <Box sx={{ padding: 2, textAlign: "center" }}>
+              <AccountCircle sx={{ fontSize: 64, margin: "0 auto" }} />{" "}
+              {/* Ícono grande en el menú */}
               <Typography variant="h6" sx={{ mt: 1 }}>
-                {username || 'Username'}
+                {username || "Username"}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {email || 'user@example.com'}
+                {email || "user@example.com"}
               </Typography>
             </Box>
             <Divider />
@@ -88,11 +110,11 @@ const Header = ({ username, email }) => {
                 to="/login"
                 color="inherit"
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  textTransform: 'none',
-                  '&:hover': {
-                    color: 'red', // Cambia el color a rojo cuando se pasa el cursor por encima
+                  display: "flex",
+                  alignItems: "center",
+                  textTransform: "none",
+                  "&:hover": {
+                    color: "red", // Cambia el color a rojo cuando se pasa el cursor por encima
                   },
                 }}
               >

@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-const tools = ['Electromagnet','Extruder','Large Opening Gripper','Standard Gripper', 'Screwdriver','Vacuum Pump'];
+const tools = [
+  "Electromagnet",
+  "Extruder",
+  "Large Opening Gripper",
+  "Standard Gripper",
+  "Screwdriver",
+  "Vacuum Pump",
+];
 
 const ToolControl = () => {
   const [selectedTool, setSelectedTool] = useState(tools[0]);
@@ -22,7 +29,7 @@ const ToolControl = () => {
         ))}
       </select>
 
-      {['Standard Gripper', 'Large Opening Gripper'].includes(selectedTool) && (
+      {["Standard Gripper", "Large Opening Gripper"].includes(selectedTool) && (
         <>
           <div>
             <label className="block text-gray-700">Opening force</label>
@@ -34,7 +41,8 @@ const ToolControl = () => {
               max="100"
               className="w-full"
             />
-            <div className="text-gray-500 text-right">{openForce}%</div> {/* Mostrar el valor de apertura */}
+            <div className="text-gray-500 text-right">{openForce}%</div>{" "}
+            {/* Mostrar el valor de apertura */}
           </div>
           <div>
             <label className="block text-gray-700">Closing force</label>
@@ -46,7 +54,8 @@ const ToolControl = () => {
               max="100"
               className="w-full"
             />
-            <div className="text-gray-500 text-right">{closeForce}%</div> {/* Mostrar el valor de cierre */}
+            <div className="text-gray-500 text-right">{closeForce}%</div>{" "}
+            {/* Mostrar el valor de cierre */}
           </div>
         </>
       )}

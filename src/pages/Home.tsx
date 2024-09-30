@@ -1,7 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Header from '../components/Layout/Header';
-import Footer from '../components/Layout/Footer';
+import { Link } from "react-router-dom";
+import Header from "../components/Layout/Header";
+import Footer from "../components/Layout/Footer";
 
 const Home = () => {
   return (
@@ -13,7 +12,7 @@ const Home = () => {
           className="absolute inset-0 bg-cover bg-center opacity-40"
           style={{
             backgroundImage: `url('https://www.framboise314.fr/wp-content/uploads/2024/01/Ned2.gif')`,
-            filter: 'blur(6px)', // Difuminado
+            filter: "blur(6px)", // Difuminado
           }}
         ></div>
 
@@ -23,7 +22,7 @@ const Home = () => {
             Welcome to the Robotics and Intelligent Systems Laboratory
           </h1>
           <p className="text-lg text-black mt-4">
-          Remotely control and monitor your robot
+            Remotely control and monitor your robot
           </p>
           <Link to="/dashboard">
             <button className="bg-blue-600 text-xl text-white py-6 px-12 rounded mt-6">
