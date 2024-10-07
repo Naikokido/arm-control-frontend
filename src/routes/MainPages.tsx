@@ -4,7 +4,7 @@ import About from "../pages/About"
 import Contact from "../pages/Contact";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
-import RegisterPage from '../pages/RegisterPage';
+import RequestAccessPage from '../pages/RequestAccessPage';
 // import Error404 from '../../presentation/pages/404.tsx';
 
 const MainPages: routerType[] = [
@@ -39,8 +39,8 @@ const MainPages: routerType[] = [
     title: "Dashboard",
   },
   {
-    path: "register",
-    element: <RegisterPage />,
+    path: "request",
+    element: <RequestAccessPage />,
     title: "Registro",
   },
 ];

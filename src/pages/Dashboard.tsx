@@ -7,7 +7,7 @@ import RobotInfo from "../components/RobotControl/RobotInfo";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import RobotConnection from "../components/RobotControl/RobotConnection";
-import CameraConnection from "../components/RobotControl/CameraConnection"; // Importar el nuevo componente
+import CameraConnection from "../components/RobotControl/CameraConnection";
 
 const Dashboard = () => {
   const [controlMode, setControlMode] = useState("ejes");
@@ -63,17 +63,17 @@ const Dashboard = () => {
 
             {/* Camera Feed */}
             <div className="col-span-2">
-              <div className="bg-white shadow p-4" style={{ height: "500px" }}>
-                {" "}
-                {/* Tamaño fijo para la cámara */}
+              <div className="bg-white shadow p-4 relative w-full">
                 <CameraFeed />
               </div>
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <div className="bg-white shadow p-4 mt-4">
+              
+              {/* Hacemos los componentes CameraConnection y RobotConnection responsivos */}
+              <div className="flex flex-col md:flex-row gap-4 mt-4">
+                <div className="bg-white shadow p-4">
                   <RobotConnection />
                 </div>
-                <div className="bg-white shadow p-4 mt-4">
-                  <CameraConnection /> {/* Añadir CameraConnection */}
+                <div className="bg-white shadow p-4">
+                  <CameraConnection />
                 </div>
               </div>
             </div>

@@ -68,8 +68,8 @@ export const LoginPage = () => {
           </form>
           <div className="text-center mt-4">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-blue-600 hover:text-blue-500">
-              Register here
+            <Link to="/request" className="text-blue-600 hover:text-blue-500">
+              Request access
             </Link>
           </div>
         </div>
