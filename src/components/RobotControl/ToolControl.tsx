@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useRobotContext } from '../../context/RobotContext';
 
 const tools = [
   "Electromagnet",
@@ -10,7 +11,7 @@ const tools = [
 ];
 
 const ToolControl = () => {
-  const [selectedTool, setSelectedTool] = useState(tools[0]);
+  const { selectedTool, setSelectedTool } = useRobotContext();
   const [openForce, setOpenForce] = useState(50);
   const [closeForce, setCloseForce] = useState(50);
 
@@ -41,8 +42,7 @@ const ToolControl = () => {
               max="100"
               className="w-full"
             />
-            <div className="text-gray-500 text-right">{openForce}%</div>{" "}
-            {/* Mostrar el valor de apertura */}
+            <div className="text-gray-500 text-right">{openForce}%</div>
           </div>
           <div>
             <label className="block text-gray-700">Closing force</label>
@@ -54,8 +54,7 @@ const ToolControl = () => {
               max="100"
               className="w-full"
             />
-            <div className="text-gray-500 text-right">{closeForce}%</div>{" "}
-            {/* Mostrar el valor de cierre */}
+            <div className="text-gray-500 text-right">{closeForce}%</div>
           </div>
         </>
       )}

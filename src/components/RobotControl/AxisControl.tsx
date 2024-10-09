@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useRobotContext } from '../../context/RobotContext'; 
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 
 const axisConfigDegrees = [
   { name: "Base Rotation", min: -168.965, max: 168.965 },
@@ -18,69 +21,99 @@ const axisConfigRadians = [
   { name: "Tool", min: -2.53, max: 2.53 },
 ];
 
-const AxisControl = () => {
-  const [axisValues, setAxisValues] = useState(axisConfigDegrees.map(() => 0));
-  const [isRadians, setIsRadians] = useState(false); // Estado para alternar entre grados y radianes
+type AxisKeys = 'J1' | 'J2' | 'J3' | 'J4' | 'J5' | 'J6';
 
-  const handleSliderChange =
-    (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newAxisValues = [...axisValues];
-      newAxisValues[index] = parseFloat(event.target.value);
-      setAxisValues(newAxisValues);
-    };
+const AxisControl = () => {
+  const { axis, setAxis } = useRobotContext(); // Usamos el contexto
+  const [isRadians, setIsRadians] = useState(false);
+
+  const handleSliderChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const axisKey: AxisKeys = `J${index + 1}` as AxisKeys;
+    const newAxisValues = { ...axis, [axisKey]: parseFloat(event.target.value) };
+    setAxis(newAxisValues);
+  };
 
   const toggleUnits = () => {
     setIsRadians(!isRadians);
-    // Convertir los valores actuales entre grados y radianes
     const conversionFactor = isRadians ? 180 / Math.PI : Math.PI / 180;
-    setAxisValues(
-      axisValues.map((value) =>
-        parseFloat((value * conversionFactor).toFixed(3))
-      ) // Convertimos el string devuelto por toFixed a número
-    );
+    setAxis({
+      J1: parseFloat((axis.J1 * conversionFactor).toFixed(3)),
+      J2: parseFloat((axis.J2 * conversionFactor).toFixed(3)),
+      J3: parseFloat((axis.J3 * conversionFactor).toFixed(3)),
+      J4: parseFloat((axis.J4 * conversionFactor).toFixed(3)),
+      J5: parseFloat((axis.J5 * conversionFactor).toFixed(3)),
+      J6: parseFloat((axis.J6 * conversionFactor).toFixed(3)),
+    });
+  };
+
+  const resetAxis = () => {
+    setAxis({
+      J1: 0,
+      J2: 0,
+      J3: 0,
+      J4: 0,
+      J5: 0,
+      J6: 0,
+    });
   };
 
   const currentConfig = isRadians ? axisConfigRadians : axisConfigDegrees;
 
   return (
     <div className="grid gap-4">
-      <button
-        onClick={toggleUnits}
-        className="px-4 py-2 bg-gray-800 text-white rounded"
-      >
-        Toggle to {isRadians ? "Degrees" : "Radians"}
-      </button>
-      {currentConfig.map((axis, index) => (
-        <div key={axis.name} className="space-y-2">
+      <div className="flex items-center space-x-2"> 
+        <span
+          style={{ color: !isRadians ? 'blue' : 'gray', fontWeight: !isRadians ? 'normal' : 'normal' }}
+        >
+          Degrees
+        </span>
+        {isRadians ? (
+          <ToggleOnIcon
+            fontSize="large"
+            style={{ color: 'gray', cursor: 'pointer' }}
+            onClick={toggleUnits}
+          />
+        ) : (
+          <ToggleOffIcon
+            fontSize="large"
+            style={{ color: 'gray', cursor: 'pointer' }}
+            onClick={toggleUnits}
+          />
+        )}
+        <span
+          style={{ color: isRadians ? 'blue' : 'gray', fontWeight: isRadians ? 'normal' : 'normal' }}
+        >
+          Radians
+        </span>
+      </div>
+
+      {/* Sliders para los ejes */}
+      {currentConfig.map((config, index) => (
+        <div key={config.name} className="space-y-2">
           <label className="block text-gray-700">
-            J{index + 1}: {axis.name}
+            J{index + 1}: {config.name}
           </label>
           <input
             type="range"
-            value={axisValues[index]}
+            value={axis[`J${index + 1}` as AxisKeys]}
             onChange={handleSliderChange(index)}
-            min={axis.min}
-            max={axis.max}
-            step="0.01" // Precisión ajustada para radianes
+            min={config.min}
+            max={config.max}
+            step="0.01"
             className="w-full"
           />
           <div className="flex justify-between text-gray-500">
-            <span>
-              {axis.min}
-              {isRadians ? " rad" : "°"}
-            </span>
-            <span>
-              {axisValues[index]}
-              {isRadians ? " rad" : "°"}
-            </span>{" "}
-            {/* Mostrar valor en grados o radianes */}
-            <span>
-              {axis.max}
-              {isRadians ? " rad" : "°"}
-            </span>
+            <span>{config.min}{isRadians ? " rad" : "°"}</span>
+            <span>{axis[`J${index + 1}` as AxisKeys]}{isRadians ? " rad" : "°"}</span>
+            <span>{config.max}{isRadians ? " rad" : "°"}</span>
           </div>
         </div>
       ))}
+
+      {/* Botón para resetear los ejes */}
+      <button onClick={resetAxis} className="px-4 py-2 bg-red-600 text-white rounded mt-4">
+        Reset Axis
+      </button>
     </div>
   );
 };

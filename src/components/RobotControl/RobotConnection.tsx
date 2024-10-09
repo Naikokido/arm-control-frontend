@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useRobotContext } from '../../context/RobotContext';
 import { FiWifi, FiSearch } from 'react-icons/fi';
 
 const RobotConnection = () => {
-  const [robotIp, setRobotIp] = useState('10.10.10.10');
+  const { robotIp, setRobotIp } = useRobotContext();
 
   const handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRobotIp(e.target.value);
@@ -12,7 +12,6 @@ const RobotConnection = () => {
     <div className="bg-white shadow p-4">
       <h2 className="text-lg font-semibold mb-4">Robot Connection</h2>
 
-      {/* Input para seleccionar IP */}
       <div className="flex items-center space-x-4">
         <input
           type="text"
@@ -29,9 +28,8 @@ const RobotConnection = () => {
         </div>
       </div>
 
-      {/* Botón para conectar */}
       <button className="mt-4 w-full bg-gray-800 text-white py-2 rounded">
-        Connect to Niryo Robot
+        Connect to Robot
       </button>
     </div>
   );

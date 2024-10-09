@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useRobotContext } from '../../context/RobotContext';
 import { FiWifi, FiSearch } from 'react-icons/fi';
 
 const CameraConnection = () => {
-  const [cameraIp, setCameraIp] = useState('192.168.1.100');
+  const { cameraIp, setCameraIp } = useRobotContext();
 
   const handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCameraIp(e.target.value);
@@ -12,7 +12,6 @@ const CameraConnection = () => {
     <div className="bg-white shadow p-4">
       <h2 className="text-lg font-semibold mb-4">Camera Connection</h2>
 
-      {/* Input para seleccionar IP */}
       <div className="flex items-center space-x-4">
         <input
           type="text"
@@ -29,7 +28,6 @@ const CameraConnection = () => {
         </div>
       </div>
 
-      {/* Botón para conectar */}
       <button className="mt-4 w-full bg-gray-800 text-white py-2 rounded">
         Connect to Camera
       </button>
