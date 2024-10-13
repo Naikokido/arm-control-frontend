@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useRobotContext } from '../../context/RobotContext'; 
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
@@ -24,9 +23,8 @@ const axisConfigRadians = [
 type AxisKeys = 'J1' | 'J2' | 'J3' | 'J4' | 'J5' | 'J6';
 
 const AxisControl = () => {
-  const { axis, setAxis } = useRobotContext(); // Usamos el contexto
-  const [isRadians, setIsRadians] = useState(false);
-
+  const { axis, setAxis, isRadians, setIsRadians } = useRobotContext(); // Usamos el contexto
+  
   const handleSliderChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const axisKey: AxisKeys = `J${index + 1}` as AxisKeys;
     const newAxisValues = { ...axis, [axisKey]: parseFloat(event.target.value) };
@@ -34,7 +32,6 @@ const AxisControl = () => {
   };
 
   const toggleUnits = () => {
-    setIsRadians(!isRadians);
     const conversionFactor = isRadians ? 180 / Math.PI : Math.PI / 180;
     setAxis({
       J1: parseFloat((axis.J1 * conversionFactor).toFixed(3)),
@@ -44,6 +41,7 @@ const AxisControl = () => {
       J5: parseFloat((axis.J5 * conversionFactor).toFixed(3)),
       J6: parseFloat((axis.J6 * conversionFactor).toFixed(3)),
     });
+    setIsRadians(!isRadians); // Actualiza el estado de las unidades
   };
 
   const resetAxis = () => {

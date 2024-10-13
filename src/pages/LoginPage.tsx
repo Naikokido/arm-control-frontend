@@ -3,21 +3,22 @@ import { InputPassword } from "../components/ui/dataEntry/InputPassword.tsx";
 import { Input } from "../components/ui/dataEntry/Input.tsx";
 import { useState } from "react";
 import logoArmControl from "../assets/logo.png";
+import { useAuth } from "../context/AuthContext"; // Importamos el contexto
 
 export const LoginPage = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  // const [loading, setLoading] = useState<boolean>(false);
+  const { login } = useAuth(); // Obtenemos la función de login del contexto
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validación para verificar si ambos campos están llenos
     if (username && password) {
-      navigate("/home"); // Redirigir a la página Home si ambos campos están llenos
+      login(username, password); // Llamamos al contexto de login para manejar la autenticación
+      navigate("/home"); // Redirigir a la página Home después de iniciar sesión
     } else {
-      alert("Please enter both username and password."); // Mensaje de alerta si falta algún campo
+      alert("Please enter both username and password.");
     }
   };
 
@@ -26,8 +27,7 @@ export const LoginPage = () => {
       <div className="relative hidden w-0 flex-1 lg:block">
         <div className="flex items-center justify-center w-full h-full bg-sign-in bg-cover brightness-50" />
         <div className="absolute text-white bottom-6 px-2 text-center">
-          ©️ {new Date().getFullYear()} Arm Control. All rights reserved |
-          Privacy Policy
+          ©️ {new Date().getFullYear()} Arm Control. All rights reserved | Privacy Policy
         </div>
       </div>
 
@@ -44,8 +44,8 @@ export const LoginPage = () => {
           <form className="space-y-4" onSubmit={handleLogin}>
             <Input
               id="username"
-              placeholder="Enter your username..."
-              label="Username"
+              placeholder="Enter your email..."
+              label="Email"
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -61,7 +61,6 @@ export const LoginPage = () => {
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50"
-              // disabled={loading}
             >
               Sign in
             </button>

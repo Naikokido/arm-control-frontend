@@ -111,9 +111,9 @@ const CoordinateControl = () => {
         </div>
       </div>
 
-      {/* Botón para resetear las coordenadas */}
+      <button className="px-4 py-2 bg-gray-800 text-white rounded mt-4">Move to Coordinates</button>
       <button onClick={resetCoordinates} className="px-4 py-2 bg-red-600 text-white rounded mt-4">
-        Reset Coordinates
+        Reset Values
       </button>
     </div>
   );

@@ -12,18 +12,20 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import logoArmControl from "../../assets/logo.png";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // Importa el ícono de salida
-import AccountCircle from "@mui/icons-material/AccountCircle"; // Importa el ícono de usuario
-import MenuIcon from '@mui/icons-material/Menu'
-import { Slide } from "@mui/material"; // Para la animación de deslizamiento
-import useMediaQuery from '@mui/material/useMediaQuery'; // Para usar breakpoints
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MenuIcon from '@mui/icons-material/Menu';
+import { Slide } from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useAuth } from "../../context/AuthContext"; // Importar el contexto de autenticación
 
-const Header = ({ username, email }: { username?: string; email?: string }) => {
+const Header = () => {
+  const { user, logout } = useAuth(); // Obtenemos la información del usuario y la función de logout del contexto
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const open = Boolean(anchorEl);
 
-  const isMobile = useMediaQuery ('(max-width:600px)');
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -35,13 +37,16 @@ const Header = ({ username, email }: { username?: string; email?: string }) => {
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
-  }
+  };
+
+  const handleLogout = () => {
+    logout(); // Llamamos la función de logout del contexto para cerrar sesión
+  };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "blue-600" }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        {/* Logo y Nombre a la izquierda */}
-        <Box display="flex" alignItems="center" sx={{ flexGrow: 1}}>
+        <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
           <img
             src={logoArmControl}
             alt="logo"
@@ -59,9 +64,8 @@ const Header = ({ username, email }: { username?: string; email?: string }) => {
           </Typography>
         </Box>
 
-        {/* Menú para pantallas grandes */}
         {!isMobile ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 2 }}> {/* Flexbox centrado */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 2 }}>
             <Button component={Link} to="/home" color="inherit">
               Home
             </Button>
@@ -82,13 +86,12 @@ const Header = ({ username, email }: { username?: string; email?: string }) => {
             aria-label="menu"
             onClick={toggleMobileMenu}
           >
-            <MenuIcon /> {/* Ícono de menú hamburguesa */}
+            <MenuIcon />
           </IconButton>
         )}
 
-          {/* Menú desplegable para pantallas móviles */}
-          {mobileMenuOpen && isMobile && (
-            <Box
+        {mobileMenuOpen && isMobile && (
+          <Box
             sx={{
               position: 'absolute',
               top: '64px',
@@ -114,10 +117,9 @@ const Header = ({ username, email }: { username?: string; email?: string }) => {
           </Box>
         )}
 
-        {/* Información de Usuario a la derecha */}
-        <Box display="flex" alignItems="center" sx={{ flexGrow:1, justifyContent:"flex-end"}}>
+        <Box display="flex" alignItems="center" sx={{ flexGrow: 1, justifyContent: "flex-end" }}>
           <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
-            <AccountCircle sx={{ fontSize: isMobile ? 30:40 }} /> {/* Ícono de usuario */}
+            <AccountCircle sx={{ fontSize: isMobile ? 30 : 40 }} />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -132,16 +134,15 @@ const Header = ({ username, email }: { username?: string; email?: string }) => {
               vertical: "top",
               horizontal: "right",
             }}
-            TransitionComponent={Slide} // Añadimos la animación de deslizamiento 
+            TransitionComponent={Slide}
           >
             <Box sx={{ padding: 2, textAlign: "center" }}>
-              <AccountCircle sx={{ fontSize: 64, margin: "0 auto" }} />{" "}
-              {/* Ícono grande en el menú */}
+              <AccountCircle sx={{ fontSize: 64, margin: "0 auto" }} />
               <Typography variant="h6" sx={{ mt: 1 }}>
-                {username || "Username"}
+                {user?.username || "Username"}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {email || "user@uoh.cl"}
+                {user?.email || "user@uoh.cl"}
               </Typography>
             </Box>
             <Divider />
@@ -155,9 +156,10 @@ const Header = ({ username, email }: { username?: string; email?: string }) => {
                   alignItems: "center",
                   textTransform: "none",
                   "&:hover": {
-                    color: "red", // Cambia el color a rojo cuando se pasa el cursor por encima
+                    color: "red",
                   },
                 }}
+                onClick={handleLogout}
               >
                 <ExitToAppIcon sx={{ marginRight: 1 }} />
                 Sign out
