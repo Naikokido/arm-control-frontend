@@ -1,10 +1,11 @@
 import { LoginPage } from "../pages/LoginPage";
 import type { routerType } from "./routerTypes";
-import About from "../pages/About"
+import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
-import RequestAccessPage from '../pages/RequestAccessPage';
+import RequestAccessPage from "../pages/RequestAccessPage";
+import RegisterPage from "../pages/RegisterPage";
 // import Error404 from '../../presentation/pages/404.tsx';
 
 const MainPages: routerType[] = [
@@ -19,23 +20,29 @@ const MainPages: routerType[] = [
     title: "Login",
   },
   {
+    path: "register",
+    element: <RegisterPage />,
+    title: "Register",
+  },
+
+  {
     path: "home",
-    element: <Home/>,
+    element: <Home />,
     title: "Home",
   },
   {
     path: "about",
-    element: <About/>,
+    element: <About />,
     title: "About",
   },
   {
     path: "contact",
-    element: <Contact/>,
+    element: <Contact />,
     title: "Contact",
   },
   {
     path: "dashboard",
-    element: <Dashboard/>,
+    element: <Dashboard />,
     title: "Dashboard",
   },
   {

@@ -1,15 +1,18 @@
 import AppRouter from "./routes/AppRouter";
-import './index.css';
-import { RobotProvider } from './context/RobotContext'; // Proveedor del contexto de robots
-import { AuthProvider } from './context/AuthContext'; // Proveedor del nuevo contexto de autenticación
+import "./index.css";
+import { RobotProvider } from "./context/RobotContext";
+import { AuthProvider } from "./context/AuthContext";
+// import { UserProvider } from "./context/UserContext";
 
 function App() {
   return (
-    <AuthProvider> {/* Envolvemos con el AuthProvider para manejo de usuarios */}
-      <RobotProvider> {/* Mantenemos el RobotProvider */}
+    // <UserProvider>
+    <AuthProvider>
+      <RobotProvider>
         <AppRouter />
       </RobotProvider>
     </AuthProvider>
+    // </UserProvider>
   );
 }
 
