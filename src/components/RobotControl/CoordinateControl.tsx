@@ -1,120 +1,182 @@
-import React from 'react';
-import { useRobotContext } from '../../context/RobotContext';  // Importa el contexto
+import React, { useState } from 'react';
+import { useRobotContext } from '../../context/RobotContext';
+import HomeIcon from '@mui/icons-material/Home';
 
 const CoordinateControl = () => {
   const { coords, setCoords } = useRobotContext();
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCoords({
-      ...coords,
-      [name]: Number(value),
-    });
+  // Función para enviar las coordenadas completas al backend
+  const moveToCoordinatesBackend = async () => {
+    try {
+      const coordinates = [
+        coords.X || 0,
+        coords.Y || 0,
+        coords.Z || 0,
+        coords.Pitch || 0,
+        coords.Roll || 0,
+        coords.Yaw || 0,
+      ];
+
+      const response = await fetch("http://localhost:5000/move_coordinates", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ coordinates }),
+      });
+
+      const data = await response.json();
+      setStatusMessage(data.message);
+    } catch (error) {
+      setStatusMessage("Error moving to coordinates. Please try again.");
+      console.error("Error moving to coordinates:", error);
+    }
   };
 
-  const resetCoordinates = () => {
-    setCoords({
-      X: 0,
-      Y: 0,
-      Z: 0,
-      Pitch: 0,
-      Roll: 0,
-      Yaw: 0,
-    });
+  // Límites de los inputs
+  const limits = {
+    X: { min: 0.1, max: 0.8 },
+    Y: { min: -0.2, max: 0.2 },
+    Z: { min: 0.1, max: 0.6 },
+    Pitch: { min: -1.5, max: 1.5 },
+    Roll: { min: -1.5, max: 1.5 },
+    Yaw: { min: -1.5, max: 1.5 },
+  };
+
+  // Función para manejar el cambio de inputs con validación de límites
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    let numericValue = parseFloat(value);
+
+    // Validar si el valor es un número
+    if (!isNaN(numericValue)) {
+      // Aplicar los límites correspondientes
+      const { min, max } = limits[name as keyof typeof limits];
+      if (numericValue < min) numericValue = min;
+      if (numericValue > max) numericValue = max;
+
+      // Actualizar el estado si está dentro de los límites
+      setCoords((prevCoords) => ({
+        ...prevCoords,
+        [name]: numericValue,
+      }));
+    } else if (value === "") {
+      // Permitir borrar el valor
+      setCoords((prevCoords) => ({
+        ...prevCoords,
+        [name]: 0,
+      }));
+    }
+  };
+
+  const resetCoordinates = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/reset_coordinates", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      console.log(data.message);
+      if(data.status == "success"){
+        const [X,Y,Z,Pitch,Roll,Yaw]=data.pose
+        setCoords({
+          X,
+          Y,
+          Z,
+          Pitch,
+          Roll,
+          Yaw,
+        });
+      }
+    } catch (error) {
+      console.error("Error resetting coordinates:", error);
+    }
   };
 
   return (
     <div className="grid gap-4">
-      {/* Controles para los ejes en la primera fila */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
+        {/* Columna 1: X, Y, Z */}
         <div className="space-y-2">
-          <label className="block text-gray-700">X (mm)</label>
+          <label className="block text-gray-700">X (m)</label>
           <input
             type="number"
             name="X"
             placeholder="X"
-            min="-2949"  
-            max="2949"   
-            value={coords.X}
+            step="0.01"
             onChange={handleInputChange}
+            value={coords.X}
             className="p-2 border border-gray-300 rounded"
           />
-        </div>
-        <div className="space-y-2">
-          <label className="block text-gray-700">Y (mm)</label>
+          <label className="block text-gray-700">Y (m)</label>
           <input
             type="number"
             name="Y"
             placeholder="Y"
-            min="-2090"  
-            max="610"    
-            value={coords.Y}
+            step="0.01"
             onChange={handleInputChange}
+            value={coords.Y}
             className="p-2 border border-gray-300 rounded"
           />
-        </div>
-        <div className="space-y-2">
-          <label className="block text-gray-700">Z (mm)</label>
+          <label className="block text-gray-700">Z (m)</label>
           <input
             type="number"
             name="Z"
             placeholder="Z"
-            min="-1340"   
-            max="1570"    
-            value={coords.Z}
+            step="0.01"
             onChange={handleInputChange}
+            value={coords.Z}
             className="p-2 border border-gray-300 rounded"
           />
         </div>
-      </div>
 
-      {/* Controles para Pitch, Roll y Yaw */}
-      <div className="grid grid-cols-3 gap-4">
+        {/* Columna 2: Pitch, Roll, Yaw */}
         <div className="space-y-2">
-          <label className="block text-gray-700">Pitch (°)</label>
+          <label className="block text-gray-700">Pitch (rad)</label>
           <input
             type="number"
             name="Pitch"
             placeholder="Pitch"
-            min="-2089"  
-            max="2089"   
-            value={coords.Pitch}
+            step="0.01"
             onChange={handleInputChange}
+            value={coords.Pitch}
             className="p-2 border border-gray-300 rounded"
           />
-        </div>
-        <div className="space-y-2">
-          <label className="block text-gray-700">Roll (°)</label>
+          <label className="block text-gray-700">Roll (rad)</label>
           <input
             type="number"
             name="Roll"
             placeholder="Roll"
-            min="-1919"   
-            max="1922"    
-            value={coords.Roll}
+            step="0.01"
             onChange={handleInputChange}
+            value={coords.Roll}
             className="p-2 border border-gray-300 rounded"
           />
-        </div>
-        <div className="space-y-2">
-          <label className="block text-gray-700">Yaw (°)</label>
+          <label className="block text-gray-700">Yaw (rad)</label>
           <input
             type="number"
             name="Yaw"
             placeholder="Yaw"
-            min="-2530"   
-            max="2530"    
-            value={coords.Yaw}
+            step="0.01"
             onChange={handleInputChange}
+            value={coords.Yaw}
             className="p-2 border border-gray-300 rounded"
           />
         </div>
       </div>
 
-      <button className="px-4 py-2 bg-gray-800 text-white rounded mt-4">Move to Coordinates</button>
-      <button onClick={resetCoordinates} className="px-4 py-2 bg-red-600 text-white rounded mt-4">
-        Reset Values
+      <button onClick={moveToCoordinatesBackend} className="px-4 py-2 bg-gray-200 text-black rounded mt-4">
+        Move to Coordinates
       </button>
+      <button onClick={resetCoordinates} className="flex items-center justify-center px-4 py-2 bg-gray-200 text-black rounded mt-4">
+        <HomeIcon className="mr-2 text-blue-600" />
+        Go to home position
+      </button>
+
+      {statusMessage && <p className="mt-4 text-center">{statusMessage}</p>}
     </div>
   );
 };

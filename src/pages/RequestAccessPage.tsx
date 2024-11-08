@@ -1,39 +1,42 @@
-import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const RequestAccessPage = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     rut: '',
-    email: '',
+    emailUsername: '',
+    emailDomain: '@pregrado.uoh.cl',
+    phone: '',
     message: '',
   });
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Validate RUT format (e.g., 12.345.678-9)
+    // Validate RUT format
     const rutPattern = /^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/;
     if (!rutPattern.test(formData.rut)) {
       alert('Please enter a valid RUT (e.g., 12.345.678-9).');
       return;
     }
 
-    // Validate UOH email domain
-    if (!formData.email.endsWith('@uoh.cl')) {
-      alert('Please enter a valid UOH institutional email.');
+    // Check if phone number has 8 digits after prefix
+    const phonePattern = /^\d{8}$/;
+    if (!phonePattern.test(formData.phone)) {
+      alert('Please enter a valid phone number (8 digits after +56 9).');
       return;
     }
 
-    // Add logic to handle form submission (e.g., send request to admin)
-    console.log('Request submitted:', formData);
+    const fullEmail = `${formData.emailUsername}${formData.emailDomain}`;
+    console.log('Request submitted:', { ...formData, email: fullEmail });
     alert('Your request has been submitted and is pending approval by an admin.');
   };
 
@@ -56,29 +59,44 @@ const RequestAccessPage = () => {
             required
           />
 
-          {/* RUT */}
-          <input
-            className="w-full p-3 border rounded"
-            type="text"
-            name="rut"
-            placeholder="RUT (e.g., 12.345.678-9)"
-            value={formData.rut}
-            onChange={handleInputChange}
-            required
-          />
-
           {/* Email */}
-          <input
-            className="w-full p-3 border rounded"
-            type="email"
-            name="email"
-            placeholder="Institutional Email (e.g., yourname@uoh.cl)"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
+          <div className="flex space-x-2">
+            <input
+              className="w:40 p-3 border rounded"
+              type="text"              
+              name="emailUsername"
+              placeholder="Institutional Email"
+              value={formData.emailUsername}
+              onChange={handleInputChange}
+              required
+            />
+            <select
+              className="w-full p-3 border rounded"
+              name="emailDomain"
+              value={formData.emailDomain}
+              onChange={handleInputChange}
+            >
+              <option value="@pregrado.uoh.cl">@pregrado.uoh.cl</option>
+              <option value="@uoh.cl">@uoh.cl</option>
+            </select>
+          </div>
 
-          {/* Request Message */}
+          {/* Phone */}
+          <div className="flex items-center">
+            <span className="p-3 border rounded-l bg-gray-200">+56 9</span>
+            <input
+              className="flex-grow p-3 border rounded-r"
+              type="text"
+              name="phone"
+              placeholder="12345678"
+              maxLength={8}
+              value={formData.phone}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          {/* Message */}
           <textarea
             className="w-full p-3 border rounded"
             name="message"

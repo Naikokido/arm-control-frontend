@@ -1,3 +1,5 @@
+import { AspectRatio } from "@mui/icons-material";
+
 export default {
   darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -24,6 +26,9 @@ export default {
           950: "#0C1117",
         },
       },
+      aspectRatio: {
+        '16/9': '16 / 9'
+      }
     },
   },
   plugins: [require("@tailwindcss/forms")],

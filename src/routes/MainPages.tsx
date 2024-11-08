@@ -6,7 +6,7 @@ import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import RequestAccessPage from "../pages/RequestAccessPage";
 import RegisterPage from "../pages/RegisterPage";
-// import Error404 from '../../presentation/pages/404.tsx';
+import UserManagement from "../pages/UserManagement"; // Importa la página de gestión de usuarios
 
 const MainPages: routerType[] = [
   {
@@ -24,7 +24,6 @@ const MainPages: routerType[] = [
     element: <RegisterPage />,
     title: "Register",
   },
-
   {
     path: "home",
     element: <Home />,
@@ -49,6 +48,11 @@ const MainPages: routerType[] = [
     path: "request",
     element: <RequestAccessPage />,
     title: "Registro",
+  },
+  {
+    path: "user-management", // Nueva ruta
+    element: <UserManagement />,
+    title: "User Management",
   },
 ];
 

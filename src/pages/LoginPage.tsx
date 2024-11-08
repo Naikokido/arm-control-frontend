@@ -9,27 +9,27 @@ import logoArmControl from "../assets/logo.png";
 // import { useUser } from "../context/UserContext"; // Importar useUser en lugar de useAuth
 
 export const LoginPage = () => {
-  const [username, setUsername] = useState<string>("");
+  const [fullname, setFullname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   // const { setUser } = useUser(); // Utilizar setUser del UserContext para almacenar solo los tokens
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username || !password) {
-      toast.error("Please enter both username and password.");
+    if (!fullname || !password) {
+      toast.error("Please enter both fullname and password.");
       return;
     }
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/login/",
-        { username, password },
+        "http://127.0.0.1:5000/api/login/",
+        { fullname, password },
         { headers: { "Content-Type": "application/json" } }
       );
 
       console.log("Login successful:", response.data);
-      // setUser({ id: "undefined", email: "undefined", username: username }); // Ejemplo si necesitas establecer algo
+      // setUser({ id: "undefined", email: "undefined", fullname: fullname }); // Ejemplo si necesitas establecer algo
       toast.success("Login successful!");
       navigate("/home");
     } catch (error) {
@@ -71,13 +71,13 @@ export const LoginPage = () => {
             </div>
             <form className="space-y-4" onSubmit={handleLogin}>
               <Input
-                id="username"
-                name="username"
-                label="Username"
-                placeholder="Enter your username..."
+                id="fullname"
+                name="fullname"
+                label="Full Name"
+                placeholder="Enter your full name..."
                 required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
               />
               <InputPassword
                 id="password"
@@ -91,7 +91,7 @@ export const LoginPage = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded"
-                disabled={!username || !password}
+                disabled={!fullname || !password}
               >
                 Sign in
               </button>
@@ -101,12 +101,7 @@ export const LoginPage = () => {
               <Link to="/request" className="text-blue-600 hover:text-blue-500">
                 Request access
               </Link>{" "}
-              <Link
-                to="/register"
-                className="text-blue-600 hover:text-blue-500"
-              >
-                Register here!
-              </Link>
+
             </div>
           </div>
         </div>

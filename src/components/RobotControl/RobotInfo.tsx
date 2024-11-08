@@ -1,7 +1,7 @@
 import { useRobotContext } from '../../context/RobotContext';
 
 const RobotInfo = () => {
-  const { coords, axis, selectedTool, cameraIp, robotIp, isRadians } = useRobotContext();
+  const { coords, axis, selectedTool, robotIp, isRadians } = useRobotContext();
 
   return (
     <div className="p-4 bg-gray-100 rounded-lg">
@@ -27,7 +27,6 @@ const RobotInfo = () => {
       <p>{selectedTool}</p>
 
       <h4 className="mt-4 font-semibold">Connections</h4>
-      <p>Camera IP: {cameraIp}</p>
       <p>Robot IP: {robotIp}</p>
     </div>
   );

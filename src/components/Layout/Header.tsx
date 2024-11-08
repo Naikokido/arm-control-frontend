@@ -14,18 +14,18 @@ import { Link } from "react-router-dom";
 import logoArmControl from "../../assets/logo.png";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 import { Slide } from "@mui/material";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useAuth } from "../../context/AuthContext"; // Importar el contexto de autenticación
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
-  const { user, logout } = useAuth(); // Obtenemos la información del usuario y la función de logout del contexto
+  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const open = Boolean(anchorEl);
 
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -40,7 +40,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    logout(); // Llamamos la función de logout del contexto para cerrar sesión
+    logout();
   };
 
   return (
@@ -50,14 +50,14 @@ const Header = () => {
           <img
             src={logoArmControl}
             alt="logo"
-            style={{ width: isMobile ? '30px' : '40px', height: isMobile ? '30px' : '40px', marginRight: "10px" }}
+            style={{ width: isMobile ? "30px" : "40px", height: isMobile ? "30px" : "40px", marginRight: "10px" }}
           />
           <Typography
             variant="h6"
             sx={{
               fontFamily: "Orbitron, sans-serif",
               fontWeight: "700",
-              fontSize: isMobile ? '16px' :'24px',
+              fontSize: isMobile ? "16px" : "24px",
             }}
           >
             Virtual Laboratory
@@ -65,12 +65,15 @@ const Header = () => {
         </Box>
 
         {!isMobile ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", flexGrow: 2 }}>
             <Button component={Link} to="/home" color="inherit">
               Home
             </Button>
             <Button component={Link} to="/dashboard" color="inherit">
               Dashboard
+            </Button>
+            <Button component={Link} to="/user-management" color="inherit">
+              Users
             </Button>
             <Button component={Link} to="/contact" color="inherit">
               Contact
@@ -80,12 +83,7 @@ const Header = () => {
             </Button>
           </Box>
         ) : (
-          <IconButton
-            edge="end"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleMobileMenu}
-          >
+          <IconButton edge="end" color="inherit" aria-label="menu" onClick={toggleMobileMenu}>
             <MenuIcon />
           </IconButton>
         )}
@@ -93,13 +91,13 @@ const Header = () => {
         {mobileMenuOpen && isMobile && (
           <Box
             sx={{
-              position: 'absolute',
-              top: '64px',
+              position: "absolute",
+              top: "64px",
               right: 0,
-              backgroundColor: 'blue',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
+              backgroundColor: "blue",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             <Button component={Link} to="/home" color="inherit" onClick={toggleMobileMenu}>
@@ -107,6 +105,9 @@ const Header = () => {
             </Button>
             <Button component={Link} to="/dashboard" color="inherit" onClick={toggleMobileMenu}>
               Dashboard
+            </Button>
+            <Button component={Link} to="/user-management" color="inherit" onClick={toggleMobileMenu}>
+              Users
             </Button>
             <Button component={Link} to="/contact" color="inherit" onClick={toggleMobileMenu}>
               Contact

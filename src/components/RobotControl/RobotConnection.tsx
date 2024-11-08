@@ -1,11 +1,42 @@
+import { useState } from 'react';
 import { useRobotContext } from '../../context/RobotContext';
-import { FiWifi, FiSearch } from 'react-icons/fi';
 
 const RobotConnection = () => {
   const { robotIp, setRobotIp } = useRobotContext();
+  const [connectionStatus, setConnectionStatus] = useState<string | null>(null); // Connection status message
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRobotIp(e.target.value);
+    setConnectionStatus(null); // Reset the message when IP changes
+  };
+
+  // Function to send the IP to the backend and verify the connection
+  const connectToRobot = async () => {
+    setIsLoading(true);
+    setConnectionStatus("Loading..."); // Show "Loading" when initiating the connection
+    
+    try {
+      const response = await fetch("http://localhost:5000/set_robot_ip", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ip_address: robotIp }),
+      });
+      
+      const data = await response.json();
+      if (response.ok) {
+        setConnectionStatus("Connection successful");
+      } else {
+        setConnectionStatus(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      setConnectionStatus("Connection error: Please check the IP or network");
+      console.error("Error connecting to robot:", error);
+    } finally {
+      setIsLoading(false); // End the loading state
+    }
   };
 
   return (
@@ -18,19 +49,23 @@ const RobotConnection = () => {
           value={robotIp}
           onChange={handleIpChange}
           className="p-2 border border-gray-300 rounded w-full"
+          placeholder="Enter robot IP address"
         />
-        <button className="bg-gray-800 text-white px-4 py-2 rounded">
-          {robotIp}
+        <button 
+          onClick={connectToRobot} 
+          className="bg-gray-800 text-white px-4 py-2 rounded"
+          disabled={isLoading} // Disable button while loading
+        >
+          {isLoading ? "Connecting..." : "Connect"}
         </button>
-        <div className="flex space-x-2">
-          <FiWifi className="text-gray-500 text-xl" />
-          <FiSearch className="text-gray-500 text-xl" />
-        </div>
       </div>
 
-      <button className="mt-4 w-full bg-gray-800 text-white py-2 rounded">
-        Connect to Robot
-      </button>
+      {/* Connection status message */}
+      {connectionStatus && (
+        <p className={`mt-4 text-center ${connectionStatus === "Connection successful" ? "text-green-600" : "text-red-600"}`}>
+          {connectionStatus}
+        </p>
+      )}
     </div>
   );
 };

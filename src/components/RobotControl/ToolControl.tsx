@@ -2,18 +2,32 @@ import { useState } from 'react';
 import { useRobotContext } from '../../context/RobotContext';
 
 const tools = [
-  "Electromagnet",
-  "Extruder",
-  "Large Opening Gripper",
-  "Standard Gripper",
-  "Screwdriver",
-  "Vacuum Pump",
+  "Gripper",
 ];
 
 const ToolControl = () => {
   const { selectedTool, setSelectedTool } = useRobotContext();
-  const [openForce, setOpenForce] = useState(50);
-  const [closeForce, setCloseForce] = useState(50);
+  const [isGripperOpen, setIsGripperOpen] = useState(false);
+
+  const handleGripperAction = async () => {
+    try {
+      const action = isGripperOpen ? "release" : "grasp";
+      const response = await fetch(`http://localhost:5000/gripper_${action}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to control the gripper.");
+      }
+
+      setIsGripperOpen(!isGripperOpen);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="grid gap-4">
@@ -30,33 +44,17 @@ const ToolControl = () => {
         ))}
       </select>
 
-      {["Standard Gripper", "Large Opening Gripper"].includes(selectedTool) && (
-        <>
-          <div>
-            <label className="block text-gray-700">Opening force</label>
-            <input
-              type="range"
-              value={openForce}
-              onChange={(e) => setOpenForce(parseInt(e.target.value))}
-              min="0"
-              max="100"
-              className="w-full"
-            />
-            <div className="text-gray-500 text-right">{openForce}%</div>
-          </div>
-          <div>
-            <label className="block text-gray-700">Closing force</label>
-            <input
-              type="range"
-              value={closeForce}
-              onChange={(e) => setCloseForce(parseInt(e.target.value))}
-              min="0"
-              max="100"
-              className="w-full"
-            />
-            <div className="text-gray-500 text-right">{closeForce}%</div>
-          </div>
-        </>
+      {["Gripper"].includes(selectedTool) && (
+        <div>
+          <button
+            onClick={handleGripperAction}
+            className={`p-2 mt-4 text-white rounded ${
+              isGripperOpen ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {isGripperOpen ? "Open Gripper" : "Close Gripper"}
+          </button>
+        </div>
       )}
     </div>
   );
