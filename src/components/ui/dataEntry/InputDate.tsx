@@ -1,7 +1,7 @@
 import { type DetailedHTMLProps, type FC, type InputHTMLAttributes } from 'react';
 import { RiErrorWarningFill } from '@remixicon/react';
 
-interface IInputProps
+interface IInputDateProps
   extends Partial<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, 'required'>> {
   id: string;
   label?: string;
@@ -10,7 +10,8 @@ interface IInputProps
   required?: boolean;
 }
 
-const Input: FC<IInputProps> = ({ id, label, error, errorMessages, required, ...leftProps }) => {
+const InputDate: FC<IInputDateProps> = ({ id, label, error, errorMessages, required, ...leftProps }) => {
+  // FIXME: height
   return (
     <div className="pb-3" style={{ height: 88 }}>
       {label && (
@@ -28,7 +29,7 @@ const Input: FC<IInputProps> = ({ id, label, error, errorMessages, required, ...
           } placeholder:text-gray-400 dark:placeholder-gray-400 focus:ring-2 focus:ring-inset ${
             error ? 'focus:ring-red-600 dark:focus:ring-red-500' : 'focus:ring-primary-600 dark:focus:ring-primary-200'
           } sm:text-sm sm:leading-6 dark:bg-gray-700 dark:text-white`}
-          type="text"
+          type="date"
         />
         {error && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
@@ -43,5 +44,5 @@ const Input: FC<IInputProps> = ({ id, label, error, errorMessages, required, ...
   );
 };
 
-export { Input };
-export type { IInputProps };
+export { InputDate };
+export type { IInputDateProps };

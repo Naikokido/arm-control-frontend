@@ -6,7 +6,13 @@ import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
 import RequestAccessPage from "../pages/RequestAccessPage";
 import RegisterPage from "../pages/RegisterPage";
-import UserManagement from "../pages/UserManagement"; // Importa la página de gestión de usuarios
+import UserManagement from "../pages/UserManagement";
+import {
+  EmployeeRoleCreatePage,
+  EmployeeRoleListPage,
+  EmployeeRoleUpdatePage,
+} from "../features/employeeRole/presentation/pages";
+import UserManagementLayout from "../components/Layout/UserManagementLayout";
 
 const MainPages: routerType[] = [
   {
@@ -53,6 +59,29 @@ const MainPages: routerType[] = [
     path: "user-management", // Nueva ruta
     element: <UserManagement />,
     title: "User Management",
+  },
+
+  {
+    path: "users",
+    element: <UserManagementLayout />,
+    title: "Users",
+    children: [
+      {
+        path: "roles-de-funcionarios",
+        element: <EmployeeRoleListPage />,
+        title: "Roles de funcionarios",
+      },
+      {
+        path: "roles-de-funcionarios/crear",
+        element: <EmployeeRoleCreatePage />,
+        title: "Crear Roles",
+      },
+      {
+        path: "roles-de-funcionarios/:employeeRoleId/editar",
+        element: <EmployeeRoleUpdatePage />,
+        title: "Editar Roles",
+      },
+    ],
   },
 ];
 

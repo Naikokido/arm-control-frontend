@@ -1,0 +1,4 @@
+build 
+node_modules
+coverage
+src/features/_global/domain/schemas/zod/

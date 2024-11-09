@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import type { routerType } from "./routerTypes";
-import MainPages from "./MainPages.tsx";
-
+import MainPages from "./MainPages";
 // Rutas con código más limpio, escalable y más legible
 // Aquí mandar el index con las rutas ordenadas
 const Router = () => {
