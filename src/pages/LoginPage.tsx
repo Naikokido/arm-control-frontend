@@ -2,34 +2,34 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-
 import { InputPassword } from "../components/ui/dataEntry/InputPassword";
 import { Input } from "../components/ui/dataEntry/Input";
 import logoArmControl from "../assets/logo.png";
-// import { useUser } from "../context/UserContext"; // Importar useUser en lugar de useAuth
+import {useUser} from '../context/UserContext.tsx';
 
 export const LoginPage = () => {
-  const [fullname, setFullname] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  // const { setUser } = useUser(); // Utilizar setUser del UserContext para almacenar solo los tokens
+  const { login } = useUser();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullname || !password) {
-      toast.error("Please enter both fullname and password.");
+    if (!email || !password) {
+      toast.error("Please enter both email and password.");
       return;
     }
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/login/",
-        { fullname, password },
-        { headers: { "Content-Type": "application/json" } }
+        import.meta.env.VITE_API_BASE_URL+ "/auth/login",
+        { email, password },
+        { headers: { "Content-Type": "application/json" },
+          withCredentials: true}
       );
 
       console.log("Login successful:", response.data);
-      // setUser({ id: "undefined", email: "undefined", fullname: fullname }); // Ejemplo si necesitas establecer algo
+      login(response.data);
       toast.success("Login successful!");
       navigate("/home");
     } catch (error) {
@@ -71,13 +71,13 @@ export const LoginPage = () => {
             </div>
             <form className="space-y-4" onSubmit={handleLogin}>
               <Input
-                id="fullname"
-                name="fullname"
+                id="email"
+                name="email"
                 label="Full Name"
                 placeholder="Enter your full name..."
                 required
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <InputPassword
                 id="password"
@@ -91,14 +91,14 @@ export const LoginPage = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded"
-                disabled={!fullname || !password}
+                disabled={!email || !password}
               >
                 Sign in
               </button>
             </form>
             <div className="text-center mt-4">
               Don’t have an account?{" "}
-              <Link to="/request" className="text-blue-600 hover:text-blue-500">
+              <Link to="/register" className="text-blue-600 hover:text-blue-500">
                 Request access
               </Link>{" "}
 

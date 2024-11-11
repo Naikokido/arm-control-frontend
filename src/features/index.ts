@@ -1,2 +1,2 @@
 export * from "./_global";
-export * from "./employeeRole";
+export * from "./user";

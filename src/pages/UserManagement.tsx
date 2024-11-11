@@ -29,7 +29,7 @@ const generateRandomPassword = () => {
 
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState(() => {
-    const savedUsers = localStorage.getItem("users");
+    const savedUsers = localStorage.getItem("user");
     return savedUsers ? JSON.parse(savedUsers) : [];
   });
 
@@ -42,7 +42,7 @@ const UserManagement: React.FC = () => {
   const [showTablePasswords, setShowTablePasswords] = useState<{[key:number]:boolean}>({});
 
   useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("user", JSON.stringify(users));
     handleSearch();
   }, [users]);
 

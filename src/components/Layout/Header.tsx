@@ -17,11 +17,13 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Slide } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useAuth } from "../../context/AuthContext";
+import { useUser } from '../../context/UserContext.tsx';
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 
 const Header = () => {
-  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { user, logout } = useUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const open = Boolean(anchorEl);
 
@@ -39,11 +41,27 @@ const Header = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    toast.loading("Closing session...");
+    try {
+
+      await axios.post(import.meta.env.VITE_API_BASE_URL+"/auth/logout", {}, {
+        withCredentials: true
+      });
+      logout();
+      toast.dismiss();
+      toast.success("Session closed successfully!");
+      handleMenuClose();
+    } catch (error) {
+      console.error('Logout failed:', error);
+      toast.dismiss();
+      toast.error("Logout failed. Please try again.");
+    }
   };
 
   return (
+    <>
+    <Toaster/>
     <AppBar position="static" sx={{ backgroundColor: "blue-600" }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
@@ -72,7 +90,7 @@ const Header = () => {
             <Button component={Link} to="/dashboard" color="inherit">
               Dashboard
             </Button>
-            <Button component={Link} to="/user-management" color="inherit">
+            <Button component={Link} to="/user/list-users" color="inherit">
               Users
             </Button>
             <Button component={Link} to="/contact" color="inherit">
@@ -106,7 +124,7 @@ const Header = () => {
             <Button component={Link} to="/dashboard" color="inherit" onClick={toggleMobileMenu}>
               Dashboard
             </Button>
-            <Button component={Link} to="/user-management" color="inherit" onClick={toggleMobileMenu}>
+            <Button component={Link} to="/user/list-users" color="inherit" onClick={toggleMobileMenu}>
               Users
             </Button>
             <Button component={Link} to="/contact" color="inherit" onClick={toggleMobileMenu}>
@@ -140,10 +158,10 @@ const Header = () => {
             <Box sx={{ padding: 2, textAlign: "center" }}>
               <AccountCircle sx={{ fontSize: 64, margin: "0 auto" }} />
               <Typography variant="h6" sx={{ mt: 1 }}>
-                {user?.username || "Username"}
+                {user?.fullname || "Guest"}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {user?.email || "user@uoh.cl"}
+                {user?.email || "No Email"}
               </Typography>
             </Box>
             <Divider />
@@ -170,6 +188,7 @@ const Header = () => {
         </Box>
       </Toolbar>
     </AppBar>
+    </>
   );
 };
 

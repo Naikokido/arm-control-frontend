@@ -8,10 +8,10 @@ import RequestAccessPage from "../pages/RequestAccessPage";
 import RegisterPage from "../pages/RegisterPage";
 import UserManagement from "../pages/UserManagement";
 import {
-  EmployeeRoleCreatePage,
-  EmployeeRoleListPage,
-  EmployeeRoleUpdatePage,
-} from "../features/employeeRole/presentation/pages";
+  UserCreatePage,
+  UserListPage,
+  UserUpdatePage,
+} from "../features/user/presentation/pages";
 import UserManagementLayout from "../components/Layout/UserManagementLayout";
 
 const MainPages: routerType[] = [
@@ -62,23 +62,23 @@ const MainPages: routerType[] = [
   },
 
   {
-    path: "users",
+    path: "user",
     element: <UserManagementLayout />,
     title: "Users",
     children: [
       {
-        path: "roles-de-funcionarios",
-        element: <EmployeeRoleListPage />,
+        path: "list-users",
+        element: <UserListPage />,
         title: "Roles de funcionarios",
       },
       {
-        path: "roles-de-funcionarios/crear",
-        element: <EmployeeRoleCreatePage />,
+        path: "list-users/crear",
+        element: <UserCreatePage />,
         title: "Crear Roles",
       },
       {
-        path: "roles-de-funcionarios/:employeeRoleId/editar",
-        element: <EmployeeRoleUpdatePage />,
+        path: "list-users/:employeeRoleId/editar",
+        element: <UserUpdatePage />,
         title: "Editar Roles",
       },
     ],
