@@ -8,7 +8,6 @@ import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import CalibrateRobot from "../components/RobotControl/CalibrateRobot";
 
-
 const Dashboard = () => {
   const [controlMode, setControlMode] = useState("ejes");
 
@@ -33,7 +32,7 @@ const Dashboard = () => {
                     }`}
                     onClick={() => handleControlModeChange("ejes")}
                   >
-                    Axis Control
+                    Joints Control
                   </button>
 
                   <button
@@ -74,7 +73,7 @@ const Dashboard = () => {
             {/* Robot Info */}
             <div className="col-span-1 mt-4">
               <div className="bg-white shadow p-4 mt-4">
-                <RobotInfo />
+                <RobotInfo controlMode={controlMode} />
               </div>
             </div>
           </div>

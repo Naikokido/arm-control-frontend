@@ -17,7 +17,7 @@ const CameraConnection = () => {
     setConnectionStatus("Loading...");
 
     try {
-      const response = await fetch("http://localhost:5000/set_camera_ip", {
+      const response = await fetch("http://localhost:5000/api/robot/set_camera_ip", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
