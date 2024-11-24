@@ -28,8 +28,9 @@ export const UserForm: FC<UserFormProps> = ({ user,roleOptions, loading, onSubmi
     },
   });
 
+
   return (
-    <form method="post" id={form.id} onSubmit={form.onSubmit}>
+    <form method="post" id={form.id} onSubmit={form.onSubmit} key={user?.id || 'new'}>
       <>
         <Row>
           <Column colSpan="col-span-6">
@@ -106,6 +107,7 @@ export const UserForm: FC<UserFormProps> = ({ user,roleOptions, loading, onSubmi
             errorMessages={fields.password.errors as string[]}
             autoComplete="off"
             disabled={loading}
+            defaultValue={user?.password || ''}
           />
         </Column>
       </Row>

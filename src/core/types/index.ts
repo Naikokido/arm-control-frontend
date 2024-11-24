@@ -5,6 +5,8 @@ interface ValidationType {
 
 interface SuccessResponse<T> {
   data?: T;
+  user_id?: number;
+  id?:number;
 }
 
 interface ErrorResponse {
@@ -22,4 +24,5 @@ export interface BaseListFilters {
   search?: string;
 }
 
-export interface IApiResponse<T> extends SuccessResponse<T>, ErrorResponse {}
+export interface IApiResponse<T> extends SuccessResponse<T>, ErrorResponse {
+}

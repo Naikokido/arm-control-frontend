@@ -38,32 +38,46 @@ export const UserCreatePage: FC = () => {
           role: formValues.role,
           phone: formValues.phone,
         })
-
         .then((response) => {
           setLoading(false);
-          const notificationTitle = "Create new User";
+          console.log('API response:', response); // Debug output
 
-          if (response.error?.message) {
+          // Verificar si la respuesta contiene el ID del usuario creado
+          if (!response.error && response.user_id) {
+            setNotification({
+              title: "Create new User",
+              type: "success",
+              message: "New user created successfully!",
+            });
+            navigate("/user/list-users");
+            return;
+          }
+
+          if (response.error) {
             setNotification({
               type: "error",
-              message: response.error.message,
-              title: notificationTitle,
+              message: response.error.message || 'Something went wrong',
+              title: "Create new User",
             });
-
             return;
           }
 
-          if (response.data?.id) {
-            setNotification({
-              title: notificationTitle,
-              type: "success",
-              message: "new user created with success",
-            });
-
-            navigate("/user/list-users");
-
-            return;
-          }
+          // Manejar otros casos inesperados
+          console.log('Unexpected API response:', response); // Para depuración
+          setNotification({
+            type: "error",
+            message: "Failed to create user, please check the data and try again.",
+            title: "Create new User",
+          });
+        })
+        .catch(error => {
+          setLoading(false);
+          console.error('API call failed:', error);
+          setNotification({
+            type: "error",
+            message: "Network error or bad response, please try again.",
+            title: "API Error",
+          });
         });
     },
     [navigate, setNotification]
