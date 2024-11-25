@@ -5,59 +5,63 @@ export class UserDatasourceImpl implements UserDatasource {
   public async getUsers(): Promise<IApiResponse<UserEntity[]>> {
     return fetch(import.meta.env.VITE_API_BASE_URL + '/users', {
       method: 'GET',
-      credentials: 'include',
     }).then(response => response.json());
   }
 
   public async getUserById(id: UserEntity['id']): Promise<IApiResponse<UserEntity>> {
-    return fetch(import.meta.env.VITE_API_BASE_URL + '/users/' + id, {
+    return fetch(`${import.meta.env.VITE_API_BASE_URL}/users/${id}`, {
       method: 'GET',
-      credentials: 'include',
-    }).then(response => response.json());
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error, status = ${response.status}`);
+      }
+      return response.json().then(data => {
+        return data;
+      });
+    }).catch(error => {
+      console.error("Error fetching user:", error);
+      throw error;
+    });
   }
 
   public async createUser(data: Omit<UserEntity, 'id'>): Promise<IApiResponse<UserEntity>> {
-    const urlEncodedData = new URLSearchParams();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '' && typeof value !== 'object') {
-        urlEncodedData.append(key, value.toString());
-      }
-    });
-
-    return fetch(import.meta.env.VITE_API_BASE_URL + '/users/register', {
+    return fetch(import.meta.env.VITE_API_BASE_URL + "/users/register", {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
-      credentials: 'include',
-      body: urlEncodedData.toString(),
-    }).then(response => response.json());
+      body: JSON.stringify(data),
+      credentials: 'include'
+    })
+      .then(response => response.json());
   }
 
   public async updateUser(data: Partial<UserEntity>): Promise<IApiResponse<UserEntity>> {
+    console.log("Data received for update:", data);
+
     const { id, ...restData } = data;
-    const urlEncodedData = new URLSearchParams();
+    if (!id) {
+      throw new Error("ID is required for updating user.");
+    }
 
-    Object.entries(restData).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '' && typeof value !== 'object') {
-        urlEncodedData.append(key, value.toString());
-      }
-    });
-
-    return fetch(import.meta.env.VITE_API_BASE_URL + '/users/' + id, {
+    return fetch(`${import.meta.env.VITE_API_BASE_URL}/users/${id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
-      credentials: 'include',
-      body: urlEncodedData.toString(),
-    }).then(response => response.json());
+      body: JSON.stringify(restData),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error, status = ${response.status}`);
+        }
+        return response.json();
+      });
   }
 
   public async deleteUserById(id: UserEntity['id']): Promise<IApiResponse<UserEntity>> {
     return fetch(import.meta.env.VITE_API_BASE_URL + '/users/' + id, {
       method: 'DELETE',
-      credentials: 'include',
     }).then(response => response.json());
   }
 }

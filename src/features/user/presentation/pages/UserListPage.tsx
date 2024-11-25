@@ -22,8 +22,9 @@ export const UserListPage: FC = () => {
     setLoadingData(true);
     getUsers.execute().then(response => {
       setLoadingData(false);
-      if (response.data) {
-        const formattedData = response.data.map(user => ({
+      // Asumiendo que la respuesta del servidor es directamente un arreglo de usuarios
+      if (Array.isArray(response)) {  // Cambia aquí para verificar si la respuesta es un arreglo
+        const formattedData = response.map(user => ({
           id: user.id,
           fullname: user.fullname,
           email: user.email,
@@ -31,7 +32,22 @@ export const UserListPage: FC = () => {
           phone: user.phone,
         }));
         setDataResponse(formattedData);
+      } else {
+        console.log('Unexpected API response:', response);
+        setNotification({
+          type: "error",
+          message: "Failed to fetch users, please try again.",
+          title: "Fetch Error"
+        });
       }
+    }).catch(error => {
+      setLoadingData(false);
+      console.error('API call failed:', error);
+      setNotification({
+        type: "error",
+        message: "Network error or bad response, please try again.",
+        title: "API Error"
+      });
     });
   }, [setNotification]);
 
