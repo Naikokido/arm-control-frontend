@@ -1,43 +1,44 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const WebSocketVideo = () => {
+interface WebSocketVideoProps {
+  onVideoStatusChange: (status: boolean) => void;
+}
+
+const WebSocketVideo: React.FC<WebSocketVideoProps> = ({ onVideoStatusChange }) => {
   const [frame, setFrame] = useState('');
 
   useEffect(() => {
-    // Cambia 'localhost' por la IP local de tu máquina
-    const ws = new WebSocket('ws://192.168.159.33:8000/ws');
-    // const ws2 = new WebSocket({`ws://${props.ipcamare}/ws`})
-  
+    const ws = new WebSocket('ws://172.16.98.183:8000/ws');
+    
     ws.onopen = () => {
       console.log('Conectado al servidor WebSocket');
     };
 
     ws.onmessage = (event) => {
-      // Recibir el frame en formato base64 y actualizar el estado
       setFrame(event.data);
+      onVideoStatusChange(true); // Cambia el estado cuando recibe video
     };
 
     ws.onclose = () => {
       console.log('Desconectado del servidor WebSocket');
+      onVideoStatusChange(false); // Actualiza el estado cuando se desconecta
     };
 
     return () => {
-      if (ws) ws.close();
+      ws.close();
     };
-  }, []);
+  }, [onVideoStatusChange]);
 
   return (
     <div>
-      <div>
-        {frame && (
-          <img
-            src={`data:image/jpeg;base64,${frame}`}
-            alt="Stream de video"
-            className='w-full'
-          />
-        )}
-      </div>
+      {frame && (
+        <img
+          src={`data:image/jpeg;base64,${frame}`}
+          alt="Stream de video"
+          className="w-full"
+        />
+      )}
     </div>
   );
 };

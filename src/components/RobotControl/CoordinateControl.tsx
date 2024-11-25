@@ -4,6 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 
 const CoordinateControl = () => {
   const { coords, setCoords } = useRobotContext();
+  const { setAxis } = useRobotContext();
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   // Función para enviar las coordenadas completas al backend
@@ -18,7 +19,7 @@ const CoordinateControl = () => {
         coords.Yaw || 0,
       ];
 
-      const response = await fetch("http://localhost:5000/move_coordinates", {
+      const response = await fetch("http://localhost:5000/api/robot/move_coordinates", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,6 +28,13 @@ const CoordinateControl = () => {
       });
 
       const data = await response.json();
+      const { joints } = data;
+
+      if (data) {
+        const [J1, J2, J3, J4, J5, J6] = joints;
+        setAxis({ J1, J2, J3, J4, J5, J6 });
+      }
+
       setStatusMessage(data.message);
     } catch (error) {
       setStatusMessage("Error moving to coordinates. Please try again.");
@@ -72,16 +80,19 @@ const CoordinateControl = () => {
 
   const resetCoordinates = async () => {
     try {
-      const response = await fetch("http://localhost:5000/reset_coordinates", {
+      const response = await fetch("http://localhost:5000/api/robot/reset_coordinates", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
+      
       const data = await response.json();
       console.log(data.message);
-      if(data.status == "success"){
-        const [X,Y,Z,Pitch,Roll,Yaw]=data.pose
+  
+      if (data.cords) {  // Verificar si la pose está en la respuesta
+        const [J1,J2,J3,J4,J5,J6] = data.joints
+        const [X, Y, Z, Pitch, Roll, Yaw] = data.cords.map ((value: number) =>parseFloat(value.toFixed(3)));  // Desestructurar la pose
         setCoords({
           X,
           Y,
@@ -90,11 +101,16 @@ const CoordinateControl = () => {
           Roll,
           Yaw,
         });
+        setAxis({ J1, J2, J3, J4, J5, J6 });
       }
+  
+      setStatusMessage(data.message);  // Mostrar el mensaje de éxito o error
     } catch (error) {
       console.error("Error resetting coordinates:", error);
+      setStatusMessage("Error resetting coordinates. Please try again.");
     }
   };
+  
 
   return (
     <div className="grid gap-4">

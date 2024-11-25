@@ -23,10 +23,10 @@ export const UserUpdatePage: FC = () => {
   const [notFound, setNotfound] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const roleOptions: ISelectOptions[] = [
+  const roleOptions: ISelectOptions[] = useMemo(() =>  [
     { label: 'Admin', value: 'admin' },
     { label: 'User', value: 'user' },
-  ];
+  ], []);
 
   const handleOnSubmit = useCallback(
     (formData: FormData) => {
@@ -36,40 +36,54 @@ export const UserUpdatePage: FC = () => {
       const formValues = Object.fromEntries(
         formFields.map((field) => [field, formData.get(field) as string])
       ) as Record<UserKeys, string>;
-      updateUser
-        .execute({
-          id: UserId,
-          fullname: formValues.fullname,
-          email: formValues.email,
-          password: formValues.password,
-          role: formValues.role,
-          phone: formValues.phone,
-        })
+      updateUser.execute({
+        id: UserId,
+        fullname: formValues.fullname,
+        email: formValues.email,
+        password: formValues.password,
+        role: formValues.role,
+        phone: formValues.phone,
+      })
         .then((response) => {
           setLoading(false);
-          const notificationTitle = "Edit User";
+          console.log('API response:', response);
 
-          if (response.error?.message) {
+          // Cambio aquí: verifica directamente la presencia de un mensaje exitoso en lugar de `user_id`
+          if (!response.error && response) {
+            setNotification({
+              title: "Update User",
+              type: "success",
+              message: "User updated successfully!",
+            });
+            navigate("/user/list-users");
+            return;
+          }
+
+          if (response.error) {
             setNotification({
               type: "error",
-              message: response.error.message,
-              title: notificationTitle,
+              message: response.error.message || 'Something went wrong',
+              title: "Update User",
             });
-
             return;
           }
 
-          if (response.data?.id) {
-            setNotification({
-              title: notificationTitle,
-              type: "success",
-              message: "new user edited with success",
-            });
-
-            navigate("/user/list-users");
-
-            return;
-          }
+          // Mensaje por defecto si la respuesta no es la esperada
+          console.log('Unexpected API response:', response);
+          setNotification({
+            type: "error",
+            message: "Failed to update user, please check the data and try again.",
+            title: "Update User",
+          });
+        })
+        .catch(error => {
+          setLoading(false);
+          console.error('API call failed:', error);
+          setNotification({
+            type: "error",
+            message: "Network error or bad response, please try again.",
+            title: "API Error",
+          });
         });
     },
     [UserId, navigate, setNotification]
@@ -94,28 +108,39 @@ export const UserUpdatePage: FC = () => {
     [UserId]
   );
 
-  useEffect(() => {
+  const fetchUserData = useCallback(() => {
+    if (!UserId) {
+      console.log("No UserId provided, skipping fetch.");
+      return;
+    }
     setLoading(true);
     getUserById.execute(UserId).then((response) => {
       setLoading(false);
 
-      if (response.error) {
+      if (response && response.id) {
+        console.log("User data received:", response);
+        setNotfound(false);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        setUser(response);
+      } else {
+        console.log("Unexpected API response:", response);
         setNotfound(true);
         setNotification({
           type: "error",
           title: "Error",
-          message: "Algo ha salido mal, intentelo nuevamente",
+          message: "No se pudo recuperar la información del usuario.",
         });
-
-        return;
       }
+    })
+  }, [UserId, setNotification]);
 
-      if (response.data) {
-        setNotfound(false);
-        setUser(response.data);
-      }
-    });
-  }, [setNotification, UserId]);
+  useEffect(() => {
+    if (UserId) {
+      fetchUserData();
+    }
+  }, [UserId]);
+
 
   return (
     <>
