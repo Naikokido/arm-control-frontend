@@ -34,11 +34,6 @@ const RegisterPage = () => {
     return regex.test(email);
   };
 
-  // const validatePhone = (phone: string) => {
-  //   const regex = /^[0-9]+$/;  // Regex básico para solo números
-  //   return regex.test(phone) && phone.length === 20;
-  // };
-
   const validatePassword = (password: string) => {
     return password.length >= 6;
   };
@@ -50,28 +45,23 @@ const RegisterPage = () => {
 
     if (!validateEmail(formData.email)) {
       toast.error(
-        "Solo se aceptan correos con prefijos @uoh.cl o @pregrado.uoh.cl"
+        "Only e-mails with prefixes @uoh.cl or @pregrado.uoh.cl will be accepted."
       );
       setLoading(false);
       return;
     }
 
     if (!validatePassword(formData.password)) {
-      toast.error("La contraseña debe tener al menos 6 caracteres");
+      toast.error("The password must be at least 6 characters long");
       setLoading(false);
       return;
     }
 
     if (!formData.role) {
-      toast.error("Por favor, selecciona un rol para el usuario");
+      toast.error("Please select a role for the user");
       setLoading(false);
       return;
     }
-    // if (!validatePhone(formData.phone)) {
-    //   toast.error("El número de teléfono debe tener 10 dígitos y solo contener números");
-    //   setLoading(false);
-    //   return;
-    // }
 
     try {
       const response = await axios.post(
@@ -85,7 +75,7 @@ const RegisterPage = () => {
       );
 
       console.log("Respuesta de la API:", response.data);
-      toast.success("Registro exitoso!");
+      toast.success("Registration successful!");
       navigate("/login");
     } catch (error) {
       console.error("Error:", error);
@@ -93,10 +83,10 @@ const RegisterPage = () => {
         const { data } = error.response;
         toast.error(
           data.message ||
-            "Error en la solicitud de registro. Vuelva a intentarlo."
+            "Error in the registration request. Please try again."
         );
       } else {
-        toast.error("Problema de conexión con el servidor.");
+        toast.error("Connection problem with the server.");
       }
     } finally {
       setLoading(false);

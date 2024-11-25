@@ -22,8 +22,8 @@ export const UserListPage: FC = () => {
     setLoadingData(true);
     getUsers.execute().then(response => {
       setLoadingData(false);
-      // Asumiendo que la respuesta del servidor es directamente un arreglo de usuarios
-      if (Array.isArray(response)) {  // Cambia aquí para verificar si la respuesta es un arreglo
+
+      if (Array.isArray(response)) {
         const formattedData = response.map(user => ({
           id: user.id,
           fullname: user.fullname,
@@ -56,19 +56,19 @@ export const UserListPage: FC = () => {
       setLoadingData(true);
       deleteUserById.execute(id).then(response => {
         setLoadingData(false);
-        const titleNotification = 'Eliminación de usuario';
+        const titleNotification = 'User delete';
         if (response.error) {
           setNotification({
             type: 'error',
             title: titleNotification,
-            message: 'Hubo un error, inténtelo nuevamente',
+            message: 'There was an error, try again',
           });
           return;
         }
         setNotification({
           type: 'success',
           title: titleNotification,
-          message: 'El usuario ha sido eliminado correctamente',
+          message: 'The user has been successfully deleted',
         });
 
         handleOnGetUsers();
@@ -85,7 +85,7 @@ export const UserListPage: FC = () => {
         href: '/home',
       },
       {
-        title: 'Listar usuarios',
+        title: 'List users',
         href: '/user/list-users',
       },
     ],
@@ -111,16 +111,17 @@ export const UserListPage: FC = () => {
         key: 'fullname',
         render: item => (
           <Link
-            to={`/user/list-users/${item.id}/editar`}
+            to={`/user/list-users/${item.id}/edit`}
             className="font-semibold text-blue-800 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
           >
             {item.fullname}
           </Link>
         ),
-        widthPercentage: 30,
+        widthPercentage: 15,
       },
-      { title: 'Email', key: 'email', dataIndex: 'email', widthPercentage: 20 },
-      { title: 'Phone', key: 'phone', dataIndex: 'phone', widthPercentage: 20 },
+      { title: 'Email', key: 'email', dataIndex: 'email', widthPercentage: 15 },
+      { title: 'Phone', key: 'phone', dataIndex: 'phone', widthPercentage: 15 },
+      { title: 'Role', key: 'role', dataIndex: 'role', widthPercentage: 15 },
 
       {
         title: '',
@@ -167,7 +168,7 @@ export const UserListPage: FC = () => {
           </div>
           <div className="flex justify-end">
             <Link
-              to="crear"
+              to="create"
               className="inline-flex items-center gap-x-1.5 rounded-md bg-primary-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm
             hover:bg-primary-500
             focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"

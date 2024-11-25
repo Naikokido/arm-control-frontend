@@ -48,7 +48,6 @@ export const UserUpdatePage: FC = () => {
           setLoading(false);
           console.log('API response:', response);
 
-          // Cambio aquí: verifica directamente la presencia de un mensaje exitoso en lugar de `user_id`
           if (!response.error && response) {
             setNotification({
               title: "Update User",
@@ -68,7 +67,6 @@ export const UserUpdatePage: FC = () => {
             return;
           }
 
-          // Mensaje por defecto si la respuesta no es la esperada
           console.log('Unexpected API response:', response);
           setNotification({
             type: "error",
@@ -97,12 +95,12 @@ export const UserUpdatePage: FC = () => {
         href: "/app/home",
       },
       {
-        title: 'Listar usuarios',
+        title: 'List users',
         href: '/user/list-users',
       },
       {
-        title: "Editar",
-        href: `/user/list-users/${UserId}/editar`,
+        title: "Edit",
+        href: `/user/list-users/${UserId}/edit`,
       },
     ],
     [UserId]
@@ -129,7 +127,7 @@ export const UserUpdatePage: FC = () => {
         setNotification({
           type: "error",
           title: "Error",
-          message: "No se pudo recuperar la información del usuario.",
+          message: "User information could not be retrieved.",
         });
       }
     })

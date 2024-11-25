@@ -40,9 +40,8 @@ export const UserCreatePage: FC = () => {
         })
         .then((response) => {
           setLoading(false);
-          console.log('API response:', response); // Debug output
+          console.log('API response:', response);
 
-          // Verificar si la respuesta contiene el ID del usuario creado
           if (!response.error && response.user_id) {
             setNotification({
               title: "Create new User",
@@ -62,8 +61,7 @@ export const UserCreatePage: FC = () => {
             return;
           }
 
-          // Manejar otros casos inesperados
-          console.log('Unexpected API response:', response); // Para depuración
+          console.log('Unexpected API response:', response);
           setNotification({
             type: "error",
             message: "Failed to create user, please check the data and try again.",
@@ -91,12 +89,12 @@ export const UserCreatePage: FC = () => {
         href: "/home",
       },
       {
-        title: 'Listar usuarios',
+        title: 'List users',
         href: '/user/list-users',
       },
       {
-        title: "Crear",
-        href: "/user/list-users/crear",
+        title: "Create",
+        href: "/user/list-users/create",
       },
     ],
     []

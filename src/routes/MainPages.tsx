@@ -69,17 +69,17 @@ const MainPages: routerType[] = [
       {
         path: "list-users",
         element: <UserListPage />,
-        title: "Roles de funcionarios",
+        title: "List users",
       },
       {
-        path: "list-users/crear",
+        path: "list-users/create",
         element: <UserCreatePage />,
-        title: "Crear Roles",
+        title: "Create users",
       },
       {
-        path: "list-users/:UserId/editar",
+        path: "list-users/:UserId/edit",
         element: <UserUpdatePage />,
-        title: "Editar Roles",
+        title: "Edit users",
       },
     ],
   },

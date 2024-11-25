@@ -73,8 +73,8 @@ export const LoginPage = () => {
               <Input
                 id="email"
                 name="email"
-                label="Full Name"
-                placeholder="Enter your full name..."
+                label="Email"
+                placeholder="Enter your email..."
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
